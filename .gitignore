@@ -4,6 +4,8 @@
 /db-sync
 /content/plugins/advanced-custom-fields-pro
 /content/upgrade/
-/content/themes/twenty*
+/content/languages/
+/content/themes/
+/content/plugins/
 .DS_Store
 /.vscode
