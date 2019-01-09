@@ -2,5 +2,8 @@
 /local-config.php
 /sql-dump-*.sql
 /db-sync
+/content/plugins/advanced-custom-fields-pro
 /content/upgrade/
+/content/themes/twenty*
 .DS_Store
+/.vscode

@@ -5,12 +5,25 @@
 if ( file_exists( dirname( __FILE__ ) . '/local-config.php' ) ) {
 	define( 'WP_LOCAL_DEV', true );
 	include( dirname( __FILE__ ) . '/local-config.php' );
+
+	// ===========
+	// Show errors
+	// ===========
+
+	ini_set( 'display_errors', 1 );
+	define( 'WP_DEBUG_DISPLAY', true );
 } else {
 	define( 'WP_LOCAL_DEV', false );
 	define( 'DB_NAME', '%%DB_NAME%%' );
 	define( 'DB_USER', '%%DB_USER%%' );
 	define( 'DB_PASSWORD', '%%DB_PASSWORD%%' );
 	define( 'DB_HOST', '%%DB_HOST%%' ); // Probably 'localhost'
+
+	// ===========
+	// Hide errors
+	// ===========
+	ini_set( 'display_errors', 0 );
+	define( 'WP_DEBUG_DISPLAY', false );
 }
 
 // ========================
@@ -47,14 +60,26 @@ $table_prefix  = 'wp_';
 // ================================
 // Language
 // Leave blank for American English
+// Change to de_DE for German (Germany)
 // ================================
 define( 'WPLANG', '' );
 
-// ===========
-// Hide errors
-// ===========
-ini_set( 'display_errors', 0 );
-define( 'WP_DEBUG_DISPLAY', false );
+// =========================================
+// Hide the page where you can edit styling
+// and markup etc. under the Appearance menu
+// =========================================
+define( 'DISALLOW_FILE_EDIT', true );
+
+// ================================
+// prevent user update/installation
+// of plugins and themes
+// ================================
+define( 'DISALLOW_FILE_MODS', false );
+
+// ===============
+// only allow https for admin area
+// ===============
+define( 'FORCE_SSL_ADMIN', false );
 
 // =================================================================
 // Debug mode
