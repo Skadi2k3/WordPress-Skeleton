@@ -7,5 +7,6 @@
 /content/languages/
 /content/themes/
 /content/plugins/
+/content/uploads/
 .DS_Store
 /.vscode
