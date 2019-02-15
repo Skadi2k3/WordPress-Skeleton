@@ -1,6 +1,4 @@
 /shared
-/local-config.php
-/sql-dump-*.sql
 /db-sync
 /content/plugins/advanced-custom-fields-pro
 /content/upgrade/
@@ -8,5 +6,11 @@
 /content/themes/
 /content/plugins/
 /content/uploads/
+/content/mu-plugins/
+/content
 .DS_Store
 /.vscode
+/vendor
+.env
+local-config.php
+sql-dump-*.sql

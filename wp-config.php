@@ -1,24 +1,46 @@
 <?php
+
 // ===================================================
-// Load database info and local development parameters
+// Load environment variables using PHP Dotenv
 // ===================================================
-if ( file_exists( dirname( __FILE__ ) . '/local-config.php' ) ) {
+require __DIR__ . '/vendor/autoload.php';
+try {
+	$dotenv = Dotenv\Dotenv::create(__DIR__);
+	$dotenv->load();
+} catch (\Exception $e) {
+}
+
+// ===================================================
+// Load local development parameters
+// ===================================================
+if ( getenv('SYS_ENV') === 'local' ) {
 	define( 'WP_LOCAL_DEV', true );
-	include( dirname( __FILE__ ) . '/local-config.php' );
+
+	if ( file_exists( dirname( __FILE__ ) . '/local-config.php' ) ) {
+		include( dirname( __FILE__ ) . '/local-config.php' );
+	}
+} else {
+	define( 'WP_LOCAL_DEV', false );
+}
+
+// ===================================================
+// Load debug settings
+// ===================================================
+if ( getenv('SYS_DEBUG') ) {
+	// =================================================================
+	// Debug mode
+	// Debugging? Enable these. Can also enable them in local-config.php
+	// =================================================================
 
 	// ===========
 	// Show errors
 	// ===========
-
 	ini_set( 'display_errors', 1 );
 	define( 'WP_DEBUG_DISPLAY', true );
-} else {
-	define( 'WP_LOCAL_DEV', false );
-	define( 'DB_NAME', '%%DB_NAME%%' );
-	define( 'DB_USER', '%%DB_USER%%' );
-	define( 'DB_PASSWORD', '%%DB_PASSWORD%%' );
-	define( 'DB_HOST', '%%DB_HOST%%' ); // Probably 'localhost'
 
+	// define( 'SAVEQUERIES', true );
+	define( 'WP_DEBUG', true );
+} else {
 	// ===========
 	// Hide errors
 	// ===========
@@ -26,11 +48,19 @@ if ( file_exists( dirname( __FILE__ ) . '/local-config.php' ) ) {
 	define( 'WP_DEBUG_DISPLAY', false );
 }
 
+// ===================================================
+// Load database info
+// ===================================================
+define( 'DB_NAME', 			getenv( 'DB_NAME' ) );
+define( 'DB_USER', 			getenv( 'DB_USER' ) );
+define( 'DB_PASSWORD', 	getenv( 'DB_PASSWORD' ) );
+define( 'DB_HOST', 			getenv( 'DB_HOST' ) );
+
 // ========================
 // Custom Content Directory
 // ========================
 define( 'WP_CONTENT_DIR', dirname( __FILE__ ) . '/content' );
-define( 'WP_CONTENT_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/content' );
+define( 'WP_CONTENT_URL', ( getenv( 'SYS_SSL' ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . '/content' );
 
 // ================================================
 // You almost certainly do not want to change these
@@ -42,14 +72,14 @@ define( 'DB_COLLATE', '' );
 // Salts, for security
 // Grab these from: https://api.wordpress.org/secret-key/1.1/salt
 // ==============================================================
-define( 'AUTH_KEY',         'put your unique phrase here' );
-define( 'SECURE_AUTH_KEY',  'put your unique phrase here' );
-define( 'LOGGED_IN_KEY',    'put your unique phrase here' );
-define( 'NONCE_KEY',        'put your unique phrase here' );
-define( 'AUTH_SALT',        'put your unique phrase here' );
-define( 'SECURE_AUTH_SALT', 'put your unique phrase here' );
-define( 'LOGGED_IN_SALT',   'put your unique phrase here' );
-define( 'NONCE_SALT',       'put your unique phrase here' );
+define( 'AUTH_KEY',         getenv( 'SYS_AUTH_KEY' ) );
+define( 'SECURE_AUTH_KEY',  getenv( 'SYS_SECURE_AUTH_KEY' ) );
+define( 'LOGGED_IN_KEY',    getenv( 'SYS_LOGGED_IN_KEY' ) );
+define( 'NONCE_KEY',        getenv( 'SYS_NONCE_KEY' ) );
+define( 'AUTH_SALT',        getenv( 'SYS_AUTH_SALT' ) );
+define( 'SECURE_AUTH_SALT', getenv( 'SYS_SECURE_AUTH_SALT' ) );
+define( 'LOGGED_IN_SALT',   getenv( 'SYS_LOGGED_IN_SALT' ) );
+define( 'NONCE_SALT',       getenv( 'SYS_NONCE_SALT' ) );
 
 // ==============================================================
 // Table prefix
@@ -80,13 +110,6 @@ define( 'DISALLOW_FILE_MODS', false );
 // only allow https for admin area
 // ===============
 define( 'FORCE_SSL_ADMIN', false );
-
-// =================================================================
-// Debug mode
-// Debugging? Enable these. Can also enable them in local-config.php
-// =================================================================
-// define( 'SAVEQUERIES', true );
-// define( 'WP_DEBUG', true );
 
 // ======================================
 // Load a Memcached config if we have one
